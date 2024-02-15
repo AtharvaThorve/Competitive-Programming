@@ -94,6 +94,9 @@ class FastReader {
 	String nextLine() {
 		String str = "";
 		try {
+			if(st == null) {
+				st = new StringTokenizer(br.readLine());
+			}
 			if (st.hasMoreTokens()) {
 				str = st.nextToken("\n");
 			} else {
