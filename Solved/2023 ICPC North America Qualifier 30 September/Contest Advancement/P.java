@@ -1,5 +1,3 @@
-package Solved.Bridges;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -15,66 +13,47 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-public class p {
+public class P {
 
 	public static void main(String[] args) throws IOException {
-		FastReader fs = new FastReader();
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		int n = fs.nextInt();
-		int m = fs.nextInt();
-		ArrayList<ArrayList<Pair<Integer, Integer>>> adjl = new ArrayList<>();
+		FastReader fr = new FastReader();
+		FastWriter fw = new FastWriter();
+		int n = fr.nextInt();
+		int k = fr.nextInt();
+		int c = fr.nextInt();
+
+		ArrayList<Pair<Integer, Integer>> rank = new ArrayList<>();
+		HashMap<Integer, Integer> picked = new HashMap<>();
+		ArrayList<Integer> ans = new ArrayList<>();
 		for(int i = 0; i < n; ++i) {
-			adjl.add(new ArrayList<>());
-		}
-		for(int q = 0; q < m; ++q) {
-			int i = fs.nextInt()-1;
-			int j = fs.nextInt()-1;
-			int c = fs.nextInt();
-			if(c == 0) {
-				adjl.get(i).add(new Pair<>(0, j));
-				adjl.get(j).add(new Pair<>(0, i));
+			int t = fr.nextInt();
+			int s = fr.nextInt();
+			int count = picked.getOrDefault(s, 0);
+			if(count < c && k > 0) {
+				ans.add(t);
+				picked.put(s, count + 1);
+				k--;
 			} else {
-				adjl.get(i).add(new Pair<>(1, j));
-				adjl.get(j).add(new Pair<>(1, i));
+				rank.add(new Pair<>(t, i));
 			}
 		}
-		bw.write(path(adjl)+"");
 
-		bw.flush();
-		bw.close();
-	}
-
-	private static int path(ArrayList<ArrayList<Pair<Integer, Integer>>> adjl) {
-		int[] dist = new int[adjl.size()];
-		boolean[] visited = new boolean[dist.length];
-		PriorityQueue<Pair<Integer, Integer>> pq = new PriorityQueue<>(new Comparator<Pair<Integer, Integer>>() {
-			@Override
-			public int compare(Pair<Integer, Integer> a, Pair<Integer, Integer> b) {
-				return a.getFirst().compareTo(b.getFirst());
-			}
-		});
-		dist[0] = 0;
-		pq.add(new Pair<>(0, 0));
-		while(!pq.isEmpty()) {
-			Pair<Integer, Integer> p = pq.poll();
-			visited[p.getSecond()] = true;
-			dist[p.getSecond()] = p.getFirst();
-			if(p.getSecond() == dist.length - 1)
-				break;
-			for(Pair<Integer, Integer> x: adjl.get(p.getSecond())) {
-				if(!visited[x.getSecond()]) {
-					Pair<Integer, Integer> y = new Pair<>(x.getFirst()+dist[p.getSecond()], x.getSecond());
-					pq.add(y);
-				}
+		if(k > 0) {
+			for(int i = 0; i < k; ++i) {
+				Pair<Integer, Integer> p = rank.get(i);
+				ans.add(p.getSecond(), p.getFirst());
 			}
 		}
-		return dist[dist.length-1];
-	}
 
+		for(int i: ans) {
+			fw.println(i);
+		}
+
+		fw.close();
+	}
 }
 
 class Pair<T, U> {
@@ -141,6 +120,9 @@ class FastReader {
 	String nextLine() {
 		String str = "";
 		try {
+			if(st == null) {
+				st = new StringTokenizer(br.readLine());
+			}
 			if (st.hasMoreTokens()) {
 				str = st.nextToken("\n");
 			} else {
@@ -150,6 +132,30 @@ class FastReader {
 			e.printStackTrace();
 		}
 		return str;
+	}
+}
+
+class FastWriter {
+	private final BufferedWriter bw;
+
+	public FastWriter() {
+		this.bw = new BufferedWriter(new OutputStreamWriter(System.out));
+	}
+
+	public void print(Object object) throws IOException {
+		bw.append("" + object);
+	}
+
+	public void println(Object object) throws IOException {
+		print(object);
+		bw.append("\n");
+	}
+	public void println() throws IOException {
+		bw.append("\n");
+	}
+
+	public void close() throws IOException {
+		bw.close();
 	}
 }
 
@@ -622,4 +628,34 @@ class Helper {
 		}
 		return tab[n][sum];
 	}
+	
+	static boolean isVowel(char c) {
+	    return c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U' || c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
+	}
+
+	static int minDesc(Node root, int min) {
+        if(root == null)
+            return min;
+
+        if(root.data < min)
+            min = root.data;
+        
+        int leftMin = minDesc(root.left, min);
+        int rightMin = minDesc(root.right, min);
+
+        return Math.min(leftMin, Math.min(rightMin, min));
+    }
+
+    static int maxDesc(Node root, int max) {
+        if(root == null)
+            return max;
+
+        if(root.data > max)
+            max = root.data;
+        
+        int leftMax = maxDesc(root.left, max);
+        int rightMax = maxDesc(root.right, max);
+
+        return Math.max(leftMax, Math.max(rightMax, max));
+    }
 }
