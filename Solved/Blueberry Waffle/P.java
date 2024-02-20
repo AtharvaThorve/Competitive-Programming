@@ -21,9 +21,16 @@ public class P {
 	public static void main(String[] args) throws IOException {
 		FastReader fr = new FastReader();
 		FastWriter fw = new FastWriter();
-		int qt = fr.nextInt();
-		while (qt-- > 0) {
-            
+		int r = fr.nextInt();
+		int f = fr.nextInt();
+
+		double degree = 180d * f / r;
+		degree %= 360;
+		
+		if(degree <= 90 || degree >= 270) {
+			fw.println("up");
+		} else {
+			fw.println("down");
 		}
 
 		fw.close();
@@ -164,14 +171,6 @@ class Helper {
 			index--;
 		}
 		return index;
-	}
-
-	static boolean isPrime(BigInteger b) {
-		return b.isProbablePrime(1);
-	}
-
-	static boolean isPrime(String s) {
-		return new BigInteger(s).isProbablePrime(1);
 	}
 
 	static int upperBoundOfList(ArrayList<Integer> arr, int key) {

@@ -21,9 +21,12 @@ public class P {
 	public static void main(String[] args) throws IOException {
 		FastReader fr = new FastReader();
 		FastWriter fw = new FastWriter();
-		int qt = fr.nextInt();
-		while (qt-- > 0) {
-            
+
+		BigInteger b = new BigInteger(fr.nextLine());
+		if(b.isProbablePrime(1)) {
+			fw.println("YES");
+		} else {
+			fw.println("NO");
 		}
 
 		fw.close();
@@ -164,14 +167,6 @@ class Helper {
 			index--;
 		}
 		return index;
-	}
-
-	static boolean isPrime(BigInteger b) {
-		return b.isProbablePrime(1);
-	}
-
-	static boolean isPrime(String s) {
-		return new BigInteger(s).isProbablePrime(1);
 	}
 
 	static int upperBoundOfList(ArrayList<Integer> arr, int key) {

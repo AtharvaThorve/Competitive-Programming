@@ -21,9 +21,25 @@ public class P {
 	public static void main(String[] args) throws IOException {
 		FastReader fr = new FastReader();
 		FastWriter fw = new FastWriter();
-		int qt = fr.nextInt();
-		while (qt-- > 0) {
-            
+		
+		int n = fr.nextInt();
+		int g = fr.nextInt();
+
+		int[][] arr = new int[n][2];
+
+		for(int i = 0; i < n; ++i) {
+			arr[i][0] = fr.nextInt();
+			arr[i][1] = fr.nextInt();
+		}
+
+		float[] ans = new float[n];
+		ans[n-1] = (float) (2 * arr[n-1][0] * g * (float)Math.cos((float)Math.toRadians(arr[n-1][1])));
+		for(int i = n-2; i >= 0; --i) {
+			ans[i] = (float) (ans[i+1] + (float)(2 * arr[i][0] * g * (float)Math.cos((float)Math.toRadians(arr[i][1]))));
+		}
+
+		for(float d: ans) {
+			fw.println((float)Math.sqrt(d));
 		}
 
 		fw.close();
@@ -164,14 +180,6 @@ class Helper {
 			index--;
 		}
 		return index;
-	}
-
-	static boolean isPrime(BigInteger b) {
-		return b.isProbablePrime(1);
-	}
-
-	static boolean isPrime(String s) {
-		return new BigInteger(s).isProbablePrime(1);
 	}
 
 	static int upperBoundOfList(ArrayList<Integer> arr, int key) {
