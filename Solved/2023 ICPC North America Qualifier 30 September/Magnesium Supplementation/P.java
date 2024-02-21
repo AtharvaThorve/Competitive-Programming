@@ -21,27 +21,38 @@ public class P {
 	public static void main(String[] args) throws IOException {
 		FastReader fr = new FastReader();
 		FastWriter fw = new FastWriter();
-		int n = fr.nextInt();
-		int[][] arr = new int[n][2];
-		for (int i = 0; i < n; ++i) {
-			arr[i][0] = fr.nextInt() - 1;
-			arr[i][1] = fr.nextInt() - 1;
-		}
+		
+		long n = fr.nextLong();
+		long k = fr.nextLong();
+		long p = fr.nextLong();
 
-		long count = 0;
-		for (int i = 0; i < n; ++i) {
-			for (int j = i+1; j < n; ++j) {
-				for (int k = j+1; k < n; ++k) {
-					if (i >= arr[j][0] && i <= arr[j][1] && i >= arr[k][0] && i <= arr[k][1] && j >= arr[i][0]
-							&& j <= arr[i][1] && j >= arr[k][0] && j <= arr[k][1] && k >= arr[i][0] && k <= arr[i][1]
-							&& k >= arr[j][0] && k <= arr[j][1]) {
-						count++;
-					}
+		ArrayList<Long> divs = new ArrayList<>();
+		for(long i = 1; i * i <= n; ++i) {
+			if(n % i == 0) {
+				divs.add(i);
+				if(n / i != i) {
+					divs.add((long)n/i);
 				}
 			}
 		}
 
-		fw.println(count);
+		long minDose = (long)Math.ceil(n / (double)p);
+		Collections.sort(divs);
+		ArrayList<Long> ans = new ArrayList<>();
+		for(int i = 0; i < divs.size(); ++i) {
+			if(divs.get(i) > k) {
+				break;
+			}
+
+			if(divs.get(i) >= minDose) {
+				ans.add(divs.get(i));
+			}
+		}
+
+		fw.println(ans.size());
+		for(Long v: ans) {
+			fw.println(v);
+		}
 
 		fw.close();
 	}
@@ -111,7 +122,7 @@ class FastReader {
 	String nextLine() {
 		String str = "";
 		try {
-			if (st == null) {
+			if(st == null) {
 				st = new StringTokenizer(br.readLine());
 			}
 			if (st.hasMoreTokens()) {
@@ -141,7 +152,6 @@ class FastWriter {
 		print(object);
 		bw.append("\n");
 	}
-
 	public void println() throws IOException {
 		bw.append("\n");
 	}
@@ -195,7 +205,7 @@ class Helper {
 		return index;
 	}
 
-	static int lowerBoundOfList(ArrayList<Integer> arr, int key) {
+	static int lowerBoundOfList(ArrayList<Long> arr, long key) {
 		int index = Collections.binarySearch(arr, key);
 		if (index < 0)
 			return Math.abs(index) - 1;
@@ -203,6 +213,14 @@ class Helper {
 			index--;
 		}
 		return index;
+	}
+
+	static boolean isPrime(BigInteger b) {
+		return b.isProbablePrime(1);
+	}
+
+	static boolean isPrime(String s) {
+		return new BigInteger(s).isProbablePrime(1);
 	}
 
 	static void fill2dArray(int[][] mat, int value, int rows) {
@@ -326,7 +344,7 @@ class Helper {
 			}
 			q.remove();
 
-			ans.add(root + "");
+			ans.add(root+"");
 		}
 		return ans;
 	}
@@ -387,18 +405,18 @@ class Helper {
 	}
 
 	// Find longest increasing subsequence in an array
-	static ArrayList<Integer> lis(int[] nums, int n) {
-		ArrayList<Integer> out = new ArrayList<>();
-		for (int val : nums) {
-			if (out.size() == 0 || out.get(out.size() - 1) < val)
-				out.add(val);
-			else {
-				int i = lowerBoundOfList(out, val);
-				out.set(i, val);
-			}
-		}
-		return out;
-	}
+	// static ArrayList<Integer> lis(int[] nums, int n) {
+	// 	ArrayList<Integer> out = new ArrayList<>();
+	// 	for (int val : nums) {
+	// 		if (out.size() == 0 || out.get(out.size() - 1) < val)
+	// 			out.add(val);
+	// 		else {
+	// 			int i = lowerBoundOfList(out, val);
+	// 			out.set(i, val);
+	// 		}
+	// 	}
+	// 	return out;
+	// }
 
 	// Longest common Subsequence of two arrays.
 	static ArrayList<Integer> lcs2(int[] arr, int[] brr, int n, int m) {
@@ -503,7 +521,7 @@ class Helper {
 	 * Reverse Array between two indices
 	 */
 	static int[] reverse(int[] arr, int start, int end) {
-		while (start < end) {
+		while(start < end) {
 			int temp = arr[start];
 			arr[start] = arr[end];
 			arr[end] = temp;
@@ -620,35 +638,34 @@ class Helper {
 		}
 		return tab[n][sum];
 	}
-
+	
 	static boolean isVowel(char c) {
-		return c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U' || c == 'a' || c == 'e' || c == 'i' || c == 'o'
-				|| c == 'u';
+	    return c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U' || c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
 	}
 
 	static int minDesc(Node root, int min) {
-		if (root == null)
-			return min;
+        if(root == null)
+            return min;
 
-		if (root.data < min)
-			min = root.data;
+        if(root.data < min)
+            min = root.data;
+        
+        int leftMin = minDesc(root.left, min);
+        int rightMin = minDesc(root.right, min);
 
-		int leftMin = minDesc(root.left, min);
-		int rightMin = minDesc(root.right, min);
+        return Math.min(leftMin, Math.min(rightMin, min));
+    }
 
-		return Math.min(leftMin, Math.min(rightMin, min));
-	}
+    static int maxDesc(Node root, int max) {
+        if(root == null)
+            return max;
 
-	static int maxDesc(Node root, int max) {
-		if (root == null)
-			return max;
+        if(root.data > max)
+            max = root.data;
+        
+        int leftMax = maxDesc(root.left, max);
+        int rightMax = maxDesc(root.right, max);
 
-		if (root.data > max)
-			max = root.data;
-
-		int leftMax = maxDesc(root.left, max);
-		int rightMax = maxDesc(root.right, max);
-
-		return Math.max(leftMax, Math.max(rightMax, max));
-	}
+        return Math.max(leftMax, Math.max(rightMax, max));
+    }
 }

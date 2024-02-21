@@ -21,27 +21,33 @@ public class P {
 	public static void main(String[] args) throws IOException {
 		FastReader fr = new FastReader();
 		FastWriter fw = new FastWriter();
-		int n = fr.nextInt();
-		int[][] arr = new int[n][2];
-		for (int i = 0; i < n; ++i) {
-			arr[i][0] = fr.nextInt() - 1;
-			arr[i][1] = fr.nextInt() - 1;
-		}
+		
+		long h = fr.nextLong();
+		long k = fr.nextLong();
+		long v = fr.nextLong();
+		long s = fr.nextLong();
 
-		long count = 0;
-		for (int i = 0; i < n; ++i) {
-			for (int j = i+1; j < n; ++j) {
-				for (int k = j+1; k < n; ++k) {
-					if (i >= arr[j][0] && i <= arr[j][1] && i >= arr[k][0] && i <= arr[k][1] && j >= arr[i][0]
-							&& j <= arr[i][1] && j >= arr[k][0] && j <= arr[k][1] && k >= arr[i][0] && k <= arr[i][1]
-							&& k >= arr[j][0] && k <= arr[j][1]) {
-						count++;
-					}
-				}
+		long dist = 0;
+		while (h > 0) {
+			v += s;
+			v -= Math.max(1, v/10);
+			if(v >= k)
+				h++;
+			else {
+				h--;
+				if(h == 0)
+				v = 0;
 			}
+			if(v <= 0) {
+				h = 0;
+				v = 0;
+			}
+			dist += v;
+			if(s > 0)
+				s--;
 		}
 
-		fw.println(count);
+		fw.println(dist);
 
 		fw.close();
 	}
@@ -111,7 +117,7 @@ class FastReader {
 	String nextLine() {
 		String str = "";
 		try {
-			if (st == null) {
+			if(st == null) {
 				st = new StringTokenizer(br.readLine());
 			}
 			if (st.hasMoreTokens()) {
@@ -141,7 +147,6 @@ class FastWriter {
 		print(object);
 		bw.append("\n");
 	}
-
 	public void println() throws IOException {
 		bw.append("\n");
 	}
@@ -182,6 +187,14 @@ class Helper {
 			index--;
 		}
 		return index;
+	}
+
+	static boolean isPrime(BigInteger b) {
+		return b.isProbablePrime(1);
+	}
+
+	static boolean isPrime(String s) {
+		return new BigInteger(s).isProbablePrime(1);
 	}
 
 	static int upperBoundOfList(ArrayList<Integer> arr, int key) {
@@ -326,7 +339,7 @@ class Helper {
 			}
 			q.remove();
 
-			ans.add(root + "");
+			ans.add(root+"");
 		}
 		return ans;
 	}
@@ -503,7 +516,7 @@ class Helper {
 	 * Reverse Array between two indices
 	 */
 	static int[] reverse(int[] arr, int start, int end) {
-		while (start < end) {
+		while(start < end) {
 			int temp = arr[start];
 			arr[start] = arr[end];
 			arr[end] = temp;
@@ -620,35 +633,34 @@ class Helper {
 		}
 		return tab[n][sum];
 	}
-
+	
 	static boolean isVowel(char c) {
-		return c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U' || c == 'a' || c == 'e' || c == 'i' || c == 'o'
-				|| c == 'u';
+	    return c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U' || c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
 	}
 
 	static int minDesc(Node root, int min) {
-		if (root == null)
-			return min;
+        if(root == null)
+            return min;
 
-		if (root.data < min)
-			min = root.data;
+        if(root.data < min)
+            min = root.data;
+        
+        int leftMin = minDesc(root.left, min);
+        int rightMin = minDesc(root.right, min);
 
-		int leftMin = minDesc(root.left, min);
-		int rightMin = minDesc(root.right, min);
+        return Math.min(leftMin, Math.min(rightMin, min));
+    }
 
-		return Math.min(leftMin, Math.min(rightMin, min));
-	}
+    static int maxDesc(Node root, int max) {
+        if(root == null)
+            return max;
 
-	static int maxDesc(Node root, int max) {
-		if (root == null)
-			return max;
+        if(root.data > max)
+            max = root.data;
+        
+        int leftMax = maxDesc(root.left, max);
+        int rightMax = maxDesc(root.right, max);
 
-		if (root.data > max)
-			max = root.data;
-
-		int leftMax = maxDesc(root.left, max);
-		int rightMax = maxDesc(root.right, max);
-
-		return Math.max(leftMax, Math.max(rightMax, max));
-	}
+        return Math.max(leftMax, Math.max(rightMax, max));
+    }
 }
