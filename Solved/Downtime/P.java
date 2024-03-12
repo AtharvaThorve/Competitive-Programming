@@ -21,10 +21,28 @@ public class P {
 	public static void main(String[] args) throws IOException {
 		FastReader fr = new FastReader();
 		FastWriter fw = new FastWriter();
-		int qt = fr.nextInt();
-		while (qt-- > 0) {
-            
+		int n = fr.nextInt();
+		int k = fr.nextInt();
+
+		int left = 0;
+		int right = 0;
+		int max = 0;
+		int[] arr = new int[n];
+		for(int i = 0; i < n; ++i)
+			arr[i] = fr.nextInt();
+		
+		while(right < n) {
+			while(right < n && arr[right] < arr[left] + 1000) {
+				right++;
+			}
+			max = Math.max(max, right - left);
+			while(left < right && right < n && arr[left] + 1000 <= arr[right]) {
+				left++;
+			}
+			right++;
 		}
+
+		fw.println((int)Math.ceil(max / (double)k));
 
 		fw.close();
 	}
@@ -261,7 +279,7 @@ class Helper {
 		return temp;
 	}
 
-	static int min(Integer... a) {
+	static int min(int... a) {
 		int min = Integer.MAX_VALUE;
 		for (int i : a) {
 			if (i < min)
@@ -270,7 +288,7 @@ class Helper {
 		return min;
 	}
 
-	static int max(Integer... a) {
+	static int max(int... a) {
 		int max = Integer.MIN_VALUE;
 		for (int i : a) {
 			if (i > max)

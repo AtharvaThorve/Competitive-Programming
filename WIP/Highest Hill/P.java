@@ -21,10 +21,13 @@ public class P {
 	public static void main(String[] args) throws IOException {
 		FastReader fr = new FastReader();
 		FastWriter fw = new FastWriter();
-		int qt = fr.nextInt();
-		while (qt-- > 0) {
-            
-		}
+		int n = fr.nextInt();
+
+		long[] arr = new long[n];
+		for (int i = 0; i < n; ++i)
+			arr[i] = fr.nextLong();
+
+		
 
 		fw.close();
 	}
@@ -94,7 +97,7 @@ class FastReader {
 	String nextLine() {
 		String str = "";
 		try {
-			if(st == null) {
+			if (st == null) {
 				st = new StringTokenizer(br.readLine());
 			}
 			if (st.hasMoreTokens()) {
@@ -124,6 +127,7 @@ class FastWriter {
 		print(object);
 		bw.append("\n");
 	}
+
 	public void println() throws IOException {
 		bw.append("\n");
 	}
@@ -261,7 +265,7 @@ class Helper {
 		return temp;
 	}
 
-	static int min(Integer... a) {
+	static int min(int... a) {
 		int min = Integer.MAX_VALUE;
 		for (int i : a) {
 			if (i < min)
@@ -270,7 +274,7 @@ class Helper {
 		return min;
 	}
 
-	static int max(Integer... a) {
+	static int max(int... a) {
 		int max = Integer.MIN_VALUE;
 		for (int i : a) {
 			if (i > max)
@@ -316,7 +320,7 @@ class Helper {
 			}
 			q.remove();
 
-			ans.add(root+"");
+			ans.add(root + "");
 		}
 		return ans;
 	}
@@ -493,7 +497,7 @@ class Helper {
 	 * Reverse Array between two indices
 	 */
 	static int[] reverse(int[] arr, int start, int end) {
-		while(start < end) {
+		while (start < end) {
 			int temp = arr[start];
 			arr[start] = arr[end];
 			arr[end] = temp;
@@ -610,34 +614,35 @@ class Helper {
 		}
 		return tab[n][sum];
 	}
-	
+
 	static boolean isVowel(char c) {
-	    return c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U' || c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
+		return c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U' || c == 'a' || c == 'e' || c == 'i' || c == 'o'
+				|| c == 'u';
 	}
 
 	static int minDesc(Node root, int min) {
-        if(root == null)
-            return min;
+		if (root == null)
+			return min;
 
-        if(root.data < min)
-            min = root.data;
-        
-        int leftMin = minDesc(root.left, min);
-        int rightMin = minDesc(root.right, min);
+		if (root.data < min)
+			min = root.data;
 
-        return Math.min(leftMin, Math.min(rightMin, min));
-    }
+		int leftMin = minDesc(root.left, min);
+		int rightMin = minDesc(root.right, min);
 
-    static int maxDesc(Node root, int max) {
-        if(root == null)
-            return max;
+		return Math.min(leftMin, Math.min(rightMin, min));
+	}
 
-        if(root.data > max)
-            max = root.data;
-        
-        int leftMax = maxDesc(root.left, max);
-        int rightMax = maxDesc(root.right, max);
+	static int maxDesc(Node root, int max) {
+		if (root == null)
+			return max;
 
-        return Math.max(leftMax, Math.max(rightMax, max));
-    }
+		if (root.data > max)
+			max = root.data;
+
+		int leftMax = maxDesc(root.left, max);
+		int rightMax = maxDesc(root.right, max);
+
+		return Math.max(leftMax, Math.max(rightMax, max));
+	}
 }

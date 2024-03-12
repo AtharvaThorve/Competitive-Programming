@@ -21,10 +21,36 @@ public class P {
 	public static void main(String[] args) throws IOException {
 		FastReader fr = new FastReader();
 		FastWriter fw = new FastWriter();
-		int qt = fr.nextInt();
-		while (qt-- > 0) {
-            
+		int n = fr.nextInt();
+		int t = fr.nextInt();
+
+		HashMap<Integer, ArrayList<Integer>> map = new HashMap<>();
+		for(int i = 0; i < n; ++i) {
+			int m = fr.nextInt();
+			int x = fr.nextInt();
+			ArrayList<Integer> temp = map.getOrDefault(x, new ArrayList<>());
+			temp.add(m);
+			map.put(x, temp);
 		}
+
+		ArrayList<Integer> money = new ArrayList<>();
+		int total = 0;
+
+		for(int i = t-1; i >= 0; --i) {
+			if(map.containsKey(i)) {
+				for(Integer m: map.get(i)) {
+					money.add(m);
+				}
+
+				if(!money.isEmpty()) {
+					Integer max = Helper.max(money.toArray(new Integer[0]));
+					total += max;
+					money.remove(max);
+				}
+			}
+		}
+		
+		fw.println(total);
 
 		fw.close();
 	}
